@@ -22,13 +22,7 @@
         </div>
         <div class="header-menu left">
             <div class="header-menu-item header-item-logo">
-                <router-link to="/" class="link">后台管理系统</router-link>
-            </div>
-            <div class="header-menu-item header-avatar" v-if="!is_debug">
-                <a class="link" href="/">
-                    <i class="el-icon-back"></i>
-                    <span class="tit">返回云账台</span>
-                </a>
+                <router-link to="/" class="link">Tinyshop后台管理</router-link>
             </div>
             <!-- <ServiceMenu></ServiceMenu> -->
             <!-- <MyCollection></MyCollection> -->
