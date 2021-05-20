@@ -10,7 +10,8 @@
             <div class="table-filter">
                 <el-button type="primary" @click="edit()" icon="el-icon-plus" class="float-right">添加</el-button>
             </div>
-            <TableMain ref="table" :columnItems="columnItems" :api="listApi">
+            <TableFilter :filterSchema="filterSchema" :listQuery.sync="listQuery" @change="search"></TableFilter>
+            <TableMain ref="table" :columnItems="columnItems" :listQuery="listQuery" :api="listApi">
                 <template slot="thumbnail" slot-scope="scope">
                     <img  v-if="scope.row.thumbnailImage" :src="baseUrl+scope.row.thumbnailImage.url" height="60px">
                 </template>
@@ -36,16 +37,22 @@ export default {
     data() {
         return {
             listQuery: {
-
+                name:'',
+                page:1,
+                pageSize: 10
             },
             listApi:goodApi.good.list,
             columnItems:[
                 {prop:'id',label:'ID'},
                 {prop:'name',label:'名称'},
                 {prop:'thumbnail',label:'主图'},
+                {prop:'tags',label:'标签'},
                 {prop:'status',label:'状态'},
                 {prop:'createdAt',label:'创建时间'},
                 {prop:'action',label:'操作',width: 180},
+            ],
+            filterSchema:[
+                {prop:'name',label:'商品名称'}
             ],
             currentData: null,
             dVisible: false,
@@ -73,6 +80,9 @@ export default {
         },
         refresh() {
             this.$refs.table.refresh();
+        },
+        search(){
+            this.$refs.table.query();
         },
         remove(data){
         	this.$confirm('确认删除商户【'+data.name+'】吗','提示').then(res=>{
