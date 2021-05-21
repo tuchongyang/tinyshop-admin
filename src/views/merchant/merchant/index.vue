@@ -10,7 +10,7 @@
             <div class="table-filter">
                 <el-button type="primary" @click="edit()" icon="el-icon-plus" class="float-right">添加</el-button>
             </div>
-            <TableMain ref="table" :columnItems="columnItems" :api="listApi" @row-click="onRowClick">
+            <TableMain ref="table" :columnItems="columnItems" :api="$api.merchant.merchant.list" @row-click="onRowClick">
                 <template slot="sex" slot-scope="scope">
                     <span v-if="scope.row.status==1">男</span>
                     <span v-else>女</span>
@@ -30,9 +30,7 @@
     </el-container>
 </template>
 <script>
-import merchantApi from '@/views/merchant/api';
 import FormDialog from '@/components/FormDialog';
-import { deepClone } from '@/utils'
 import Detail from './detail';
 
 export default {
@@ -42,7 +40,6 @@ export default {
             listQuery: {
 
             },
-            listApi:merchantApi.merchant.list,
             columnItems:[
                 {prop:'id',label:'ID'},
                 {prop:'name',label:'名称'},
@@ -78,7 +75,7 @@ export default {
                         {required: true, message: '请输入名称',trigger: 'blur'}
                     ],
                 },
-                api:{save: merchantApi.merchant.save,update: merchantApi.merchant.save},
+                api:{save: this.$api.merchant.merchant.save,update: this.$api.merchant.merchant.save},
                 form: data,
                 submit: this.submit
             })
@@ -95,7 +92,7 @@ export default {
         },
         remove(data){
         	this.$confirm('确认删除商户【'+data.name+'】吗','提示').then(res=>{
-        		merchantApi.merchant.remove(data.id).then(res=>{
+        		this.$api.merchant.merchant.remove(data.id).then(res=>{
         			this.$message({type:'success',message:'删除成功',duration: 2000});
         			this.refresh();
         		})

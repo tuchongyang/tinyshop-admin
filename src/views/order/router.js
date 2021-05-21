@@ -7,7 +7,7 @@ export default  [{
     children: [
         {
             path: 'list',
-            component: ()=>import('./views/list'),
+            component: ()=>import('./list'),
         },
     ]
 }]

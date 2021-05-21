@@ -14,7 +14,6 @@
     </el-drawer>
 </template>
 <script>
-import merchantApi from "@/views/merchant/api";
 import BaseInfo from '@/components/BaseInfo';
 import {constant} from '@/filters'
 export default {

@@ -10,7 +10,7 @@
             <div class="table-filter">
                 <table-filter :listQuery.sync="listQuery" :filterSchema="filterSchema" @change="search"></table-filter>
             </div>
-            <TableMain ref="table" :columnItems="columnItems" :listQuery="listQuery" :api="listApi" @row-click="onRowClick">
+            <TableMain ref="table" :columnItems="columnItems" :listQuery="listQuery" :api="$api.shop.order.list" @row-click="onRowClick">
                 <template slot="action" slot-scope="scope">
                     <el-button type="text" icon="el-icon-tickets">详情</el-button>
                     <!-- <el-button type="text" icon="el-icon-delete" class="color-red" @click.stop="remove(scope.row)">删除</el-button> -->
@@ -21,9 +21,6 @@
     </el-container>
 </template>
 <script>
-import orderApi from '@/views/order/api';
-import FormDialog from '@/components/FormDialog';
-import { deepClone } from '@/utils'
 import {mapGetters} from 'vuex'
 import {castFilter,constant} from '@/filters'
 import {constantMap} from '@/utils/constant'
@@ -39,7 +36,6 @@ export default {
                 userName:'',
                 status:''
             },
-            listApi:orderApi.order.list,
             columnItems:[
                 {prop:'id',label:'ID'},
                 {prop:'orderNo',label:'订单编号'},

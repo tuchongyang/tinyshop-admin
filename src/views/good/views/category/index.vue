@@ -10,7 +10,7 @@
             <div class="table-filter">
                 <el-button type="primary" @click="edit()" icon="el-icon-plus" class="float-right">添加</el-button>
             </div>
-            <TableMain ref="table" :columnItems="columnItems" :api="listApi" @row-click="onRowClick">
+            <TableMain ref="table" :columnItems="columnItems" :api="$api.shop.category.list" @row-click="onRowClick">
                 <template slot="icon" slot-scope="scope">
                     <img  v-if="scope.row.image" :src="baseUrl+scope.row.image.url" height="60px">
                 </template>
@@ -31,9 +31,7 @@
     </el-container>
 </template>
 <script>
-import goodApi from '@/views/good/api';
 import FormDialog from '@/components/FormDialog';
-import { deepClone } from '@/utils'
 import {mapGetters} from 'vuex'
 export default {
     components: { },
@@ -42,7 +40,6 @@ export default {
             listQuery: {
 
             },
-            listApi:goodApi.category.list,
             columnItems:[
                 {prop:'id',label:'ID'},
                 {prop:'name',label:'名称'},
@@ -73,7 +70,7 @@ export default {
             var schema = [
                 {label:'名称',prop: "name"},
                 {label:'描述',prop: "description"},
-                {label:'上级分类',prop: "parentId",formtype:'select',remote:true,remoteMethod:goodApi.category.select,valueKey:'id',labelKey:'name'},
+                {label:'上级分类',prop: "parentId",formtype:'select',remote:true,remoteMethod:this.$api.shop.category.select,valueKey:'id',labelKey:'name'},
                 {label:'图片',prop: "images",formtype: 'file',default:[]},
                 {label:'描述',prop: "imageId",hidden: true},
                 {label:'描述',prop: "merchantId",hidden: true,default: this.user.merchant.id},
@@ -87,7 +84,7 @@ export default {
                         {required: true, message: '请输入名称',trigger: 'blur'}
                     ],
                 },
-                api:{save: goodApi.category.save,update: goodApi.category.save},
+                api:{save: this.$api.shop.category.save,update: this.$api.shop.category.save},
                 form: data,
                 beforeSubmit(form){
                     if(form.images && form.images.length){
@@ -113,7 +110,7 @@ export default {
         },
         remove(data){
         	this.$confirm('确认删除分类【'+data.name+'】吗','提示').then(res=>{
-        		goodApi.category.remove(data.id).then(res=>{
+        		this.$api.shop.category.remove(data.id).then(res=>{
         			this.$message({type:'success',message:'删除成功',duration: 2000});
         			this.refresh();
         		})

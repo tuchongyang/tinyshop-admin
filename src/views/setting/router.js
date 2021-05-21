@@ -7,19 +7,19 @@ export default  [{
     children: [
         {
             path: 'person',
-            component: ()=>import('./views/person'),
+            component: ()=>import('./person'),
         },
         {
             path: 'shop',
-            component: ()=>import('./views/shop'),
+            component: ()=>import('./shop'),
         },
         {
             path: 'banner',
-            component: ()=>import('./views/banner'),
+            component: ()=>import('./banner'),
         },
         {
             path: 'banner/edit',
-            component: ()=>import('./views/banner/edit'),
+            component: ()=>import('./banner/edit'),
         },
     ]
 }]

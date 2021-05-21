@@ -10,7 +10,7 @@
             <div class="table-filter">
                 <el-button type="primary" @click="edit()" icon="el-icon-plus" class="float-right">添加</el-button>
             </div>
-            <TableMain ref="table" :columnItems="columnItems" :api="listApi" @row-click="onRowClick">
+            <TableMain ref="table" :columnItems="columnItems" :api="$api.shop.banner.list" @row-click="onRowClick">
                 <template slot="image" slot-scope="scope">
                     <img :src="baseUrl + scope.row.image.url" height="50">
                 </template>
@@ -27,9 +27,6 @@
     </el-container>
 </template>
 <script>
-import settingApi from '@/views/setting/api';
-import FormDialog from '@/components/FormDialog';
-import { deepClone } from '@/utils'
 import {mapGetters} from 'vuex'
 export default {
     components: { },
@@ -38,7 +35,6 @@ export default {
             listQuery: {
 
             },
-            listApi:settingApi.shop.banner.list,
             columnItems:[
                 {prop:'id',label:'ID'},
                 {prop:'url',label:'链接'},
@@ -80,7 +76,7 @@ export default {
         },
         remove(data){
         	this.$confirm('确认删除吗','提示').then(res=>{
-        		settingApi.shop.banner.remove(data.id).then(res=>{
+        		this.$api.shop.banner.remove(data.id).then(res=>{
         			this.$message({type:'success',message:'删除成功',duration: 2000});
         			this.refresh();
         		})

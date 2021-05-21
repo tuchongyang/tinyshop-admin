@@ -30,7 +30,6 @@
 </template>
 <script>
 import {mapGetters} from 'vuex';
-import merchantApi from "@/views/merchant/api";
 import BaseInfo from '@/components/BaseInfo';
 import {constant,time} from '@/filters'
 import {constantMap} from '@/utils/constant'
@@ -115,7 +114,7 @@ export default {
             if (current) {
                 status = `<span class="${current.className}">${current.label}</span>`
             }
-            this.$api.order.order.detail(this.data.id).then(res=>{
+            this.$api.shop.order.detail(this.data.id).then(res=>{
                 this.userInfo = [
                     {title:'ID',value: res.result.id},
                     {title:'订单编号',value: res.result.username},

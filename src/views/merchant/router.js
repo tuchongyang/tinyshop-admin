@@ -7,7 +7,7 @@ export default  [{
     children: [
         {
             path: 'merchant',
-            component: ()=>import('./views/merchant'),
+            component: ()=>import('./merchant'),
         },
     ]
 }]

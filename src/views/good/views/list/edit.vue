@@ -87,8 +87,6 @@
     </el-container>
 </template>
 <script>
-import goodApi from '@/views/good/api';
-import FormDialog from '@/components/FormDialog';
 import { deepClone } from '@/utils'
 import { mapGetters } from 'vuex'
 export default {
@@ -139,7 +137,7 @@ export default {
         },
         getData(){
             const id = this.$route.query.id;
-            goodApi.good.detail(id).then(res=>{
+            this.$api.shop.good.detail(id).then(res=>{
                 this.form = res.result
                 this.fileList = res.result.images.map(item=>{
                     item.url = this.baseUrl + item.url;
@@ -157,7 +155,7 @@ export default {
             this.$refs.table.refresh();
         },
         getCategory() {
-            goodApi.category.tree().then(res => {
+            this.$api.shop.category.tree().then(res => {
                 this.categoryList = res.result;
             })
         },
@@ -204,7 +202,7 @@ export default {
                     postData.categoryId = postData.categoryId.pop()
                 }
                 this.loading=true
-                goodApi.good.save(postData).then(()=>{
+                this.$api.shop.good.save(postData).then(()=>{
                     this.$message({type:'success',message:'保存成功',duration:2000});
                     this.$router.back();
                 }).finally(()=>{

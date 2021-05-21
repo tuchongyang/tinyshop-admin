@@ -44,8 +44,6 @@
     </el-container>
 </template>
 <script>
-import settingApi from '@/views/setting/api';
-import FormDialog from '@/components/FormDialog';
 import { deepClone } from '@/utils'
 import { mapGetters } from 'vuex'
 export default {
@@ -82,7 +80,7 @@ export default {
         },
         getData(){
             const id = this.$route.query.id;
-            settingApi.shop.banner.detail(id).then(res=>{
+            this.$api.shop.banner.detail(id).then(res=>{
                 this.form = res.result
                 res.result.image.url = this.baseUrl + res.result.image.url;
                 this.fileList = [res.result.image]
@@ -132,7 +130,7 @@ export default {
                 var postData = deepClone(this.form);
                 postData.imageId=fileList[0].id
                 this.loading=true
-                settingApi.shop.banner.save(postData).then(()=>{
+                this.$api.shop.banner.save(postData).then(()=>{
                     this.$message({type:'success',message:'保存成功',duration:2000});
                     this.$router.back();
                 }).finally(()=>{

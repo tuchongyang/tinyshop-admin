@@ -11,7 +11,7 @@
                 <el-button type="primary" @click="edit()" icon="el-icon-plus" class="float-right">添加</el-button>
             </div>
             <TableFilter :filterSchema="filterSchema" :listQuery.sync="listQuery" @change="search"></TableFilter>
-            <TableMain ref="table" :columnItems="columnItems" :listQuery="listQuery" :api="listApi">
+            <TableMain ref="table" :columnItems="columnItems" :listQuery="listQuery" :api="$api.shop.good.list">
                 <template slot="thumbnail" slot-scope="scope">
                     <img  v-if="scope.row.thumbnailImage" :src="baseUrl+scope.row.thumbnailImage.url" height="60px">
                 </template>
@@ -28,9 +28,6 @@
     </el-container>
 </template>
 <script>
-import goodApi from '@/views/good/api';
-import FormDialog from '@/components/FormDialog';
-import { deepClone } from '@/utils'
 import {mapGetters} from 'vuex'
 export default {
     components: { },
@@ -41,7 +38,6 @@ export default {
                 page:1,
                 pageSize: 10
             },
-            listApi:goodApi.good.list,
             columnItems:[
                 {prop:'id',label:'ID'},
                 {prop:'name',label:'名称'},
@@ -85,8 +81,8 @@ export default {
             this.$refs.table.query();
         },
         remove(data){
-        	this.$confirm('确认删除商户【'+data.name+'】吗','提示').then(res=>{
-        		goodApi.good.remove(data.id).then(res=>{
+        	this.$confirm('确认删除商品【'+data.name+'】吗','提示').then(res=>{
+        		this.$api.shop.good.remove(data.id).then(res=>{
         			this.$message({type:'success',message:'删除成功',duration: 2000});
         			this.refresh();
         		})
