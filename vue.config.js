@@ -21,5 +21,22 @@ module.exports={
             chunks: ['chunk-vendors', 'chunk-common', 'index']
         }
         
+    },
+    devServer: {
+        open: process.platform === 'darwin',
+        host: '0.0.0.0',
+        port: 8080,
+        https: false,
+        hotOnly: true,
+        proxy: {
+            'api': {
+                target: 'http://tinyshop.tucy.top',
+                ws: true,
+                changeOrigin: true,
+                // pathRewrite:{
+                    //     //     '^/hyperone':'/'
+                    //     // }
+            },
+        }
     }
 }
