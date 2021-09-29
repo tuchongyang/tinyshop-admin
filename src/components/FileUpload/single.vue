@@ -126,7 +126,7 @@ export default{
 
             this.axios({
                 method: 'post',
-                url: '/file/upload?random='+genNonDuplicateID(6),
+                url: '/system/file/upload?random='+genNonDuplicateID(6),
                 headers: {
                 'Content-Type': 'multipart/form-data'
                 },

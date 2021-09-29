@@ -21,7 +21,7 @@
                     <el-input v-model="form.description" type="textarea" rows="5"></el-input>
                 </el-form-item>
                 <el-form-item label="商品图片">
-                    <el-upload ref="upload" :action="baseUrl+'/api/file/upload'" :file-list="fileList" list-type="picture-card" :auto-upload="true" :on-success="onSuccess">
+                    <el-upload ref="upload" :action="baseUrl+'/api/system/file/upload'" :file-list="fileList" list-type="picture-card" :auto-upload="true" :on-success="onSuccess">
                         <i slot="default" class="el-icon-plus"></i>
                         <div slot="file" slot-scope="{file}">
                             <span v-if="file.isDefault" class="image-default-tag">主图</span>

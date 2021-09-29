@@ -43,7 +43,7 @@ export default{
     },
     computed:{
         action(){
-            return this.$store.getters.baseUrl+'/hyperone/file/upload'
+            return this.$store.getters.baseUrl+'/hyperone/system/file/upload'
         },
         acceptType(){
             const map={

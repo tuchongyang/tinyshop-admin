@@ -37,6 +37,11 @@ module.exports={
                     //     //     '^/hyperone':'/'
                     //     // }
             },
+            'public': {
+                target: 'http://tinyshop.tucy.top',
+                ws: true,
+                changeOrigin: true
+            },
         }
     }
 }
