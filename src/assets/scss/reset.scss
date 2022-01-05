@@ -1,0 +1,18 @@
+/**
+* 覆盖element-ui默认样式
+*/
+/*
+* @title el-step 组件
+* @descriotion 原有组件线条太粗，字体太大
+*/
+.el-step__icon.is-text {
+  border-width: 1px;
+}
+.el-step.is-horizontal .el-step__line {
+  height: 1px;
+}
+.el-step__title {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 5px;
+}
