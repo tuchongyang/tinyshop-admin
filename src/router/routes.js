@@ -49,6 +49,18 @@ export default [
             meta: { title: "主题" },
             component: () => import("@/views/setting/ThemeSetting"),
           },
+          {
+            path: "person",
+            name: "person",
+            meta: { title: "个人资料" },
+            component: () => import("@/views/setting/person/IndexView"),
+          },
+          {
+            path: "shop",
+            name: "settingShop",
+            meta: { title: "店铺资料" },
+            component: () => import("@/views/setting/shop/IndexView"),
+          },
         ],
       },
       {
@@ -100,6 +112,52 @@ export default [
             name: "merchantList",
             meta: { title: "商家管理" },
             component: () => import("@/views/merchant/ListView"),
+          },
+        ],
+      },
+      {
+        path: "/shop",
+        name: "shop",
+        meta: { title: "店铺管理", icon: "Setting" },
+        component: () => import("@/components/Layout/EmptyLayout"),
+        children: [
+          {
+            path: "good",
+            name: "good",
+            meta: { title: "商品管理" },
+            component: () => import("@/views/shop/good/ListView"),
+          },
+          {
+            path: "good/add",
+            name: "goodAdd",
+            meta: { title: "添加商品" },
+            component: () => import("@/views/shop/good/AddView"),
+          },
+          {
+            path: "category",
+            name: "category",
+            meta: { title: "商品分类" },
+            component: () => import("@/views/shop/category/ListView"),
+          },
+          {
+            path: "banner",
+            name: "banner",
+            meta: { title: "首页轮播图" },
+            component: () => import("@/views/shop/banner/ListView"),
+          },
+        ],
+      },
+      {
+        path: "/order",
+        name: "order",
+        meta: { title: "订单管理", icon: "Setting" },
+        component: () => import("@/components/Layout/EmptyLayout"),
+        children: [
+          {
+            path: "list",
+            name: "orderList",
+            meta: { title: "订单管理" },
+            component: () => import("@/views/order/ListView"),
           },
         ],
       },

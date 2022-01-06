@@ -1,3 +1,5 @@
 import system from "./system"
 import merchant from "./merchant"
-export default { system, merchant }
+import shop from "./shop"
+import store from "./store"
+export default { system, merchant, shop, store }

@@ -3,6 +3,9 @@ export default {
   save(opt) {
     return axios.post("/merchant/save", opt)
   },
+  update(opt) {
+    return axios.post("/merchant/update", opt)
+  },
   select(params) {
     return axios.get("/merchant/list", { params })
   },
@@ -11,5 +14,8 @@ export default {
   },
   remove(id) {
     return axios.delete("/merchant/" + id)
+  },
+  detail(id) {
+    return axios.get("/merchant/" + id)
   },
 }

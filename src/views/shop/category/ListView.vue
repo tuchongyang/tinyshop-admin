@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PageHeader title="商家管理" desc="商家管理,每一个商家就是一个店铺" />
+    <PageHeader title="商品分类" desc="管理商品的类别。" />
     <BaseInfo type="card">
       <CurdTable ref="tableRef" :data="data" :columns="columns" :page-options="pageOptions" index click-row-to-view :fetch-data="fetchData" :fetch-create="fetchCreate" :fetch-edit="fetchEdit" :fetch-remove="fetchRemove" @selectionChange="selectionChange">
         <!-- <template #roleId="scope">
@@ -27,7 +27,7 @@ const data = ref([])
 const columns = getColumns()
 
 const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const params = {
       pageIndex,
       pageSize,
@@ -38,16 +38,21 @@ const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
       params.sortColumn = sortColumn
       params.sortType = sortType
     }
-    api.merchant.list(params).then((res) => {
-      data.value = res.result.rows // 数据赋值
-      pageOptions.value.total = res.result.count // 设置总页数
-      resolve()
-    })
+    api.shop.category
+      .list(params)
+      .then((res) => {
+        data.value = res.result.rows // 数据赋值
+        pageOptions.value.total = res.result.count // 设置总页数
+        resolve()
+      })
+      .catch(() => {
+        reject()
+      })
   })
 }
 const fetchCreate = (params) => {
   return new Promise((resolve, reject) => {
-    api.merchant
+    api.shop.category
       .save(params)
       .then(() => {
         instance.appContext.config.globalProperties.$message.success("保存成功")
@@ -62,7 +67,7 @@ const fetchCreate = (params) => {
 const fetchEdit = (editedParams, fullParams) => {
   editedParams.id = fullParams.id
   return new Promise((resolve, reject) => {
-    api.merchant
+    api.shop.category
       .save(editedParams)
       .then(() => {
         instance.appContext.config.globalProperties.$message.success("保存成功")
@@ -76,7 +81,7 @@ const fetchEdit = (editedParams, fullParams) => {
 }
 const fetchRemove = (row) => {
   return new Promise((resolve, reject) => {
-    api.merchant
+    api.shop.category
       .remove(row.id)
       .then(() => {
         tableRef.value.fetchData()

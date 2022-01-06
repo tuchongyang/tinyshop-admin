@@ -2,7 +2,7 @@
   <MessageCenter class="menu-item" />
   <el-dropdown trigger="click" class="menu-item item-avatar" @command="handleCommand">
     <span class="toggle">
-      <el-avatar class="avatar" :size="30" :src="circleUrl"></el-avatar><span class="name">{{ user.name || user.email }}</span> <el-icon><arrow-down /></el-icon
+      <el-avatar class="avatar" :size="30" :src="user.avatarUrl || circleUrl"></el-avatar><span class="name">{{ user.name || user.email }}</span> <el-icon><arrow-down /></el-icon
     ></span>
     <template #dropdown>
       <el-dropdown-menu>
@@ -26,9 +26,11 @@ const router = useRouter()
 const handleCommand = (command) => {
   switch (command) {
     case "a":
+      router.push("/setting/person")
       break
     case "b":
       store.commit("user/logout")
+      store.dispatch("tagView/delAllViews")
       router.push("/login")
       break
   }
@@ -49,12 +51,13 @@ const handleCommand = (command) => {
 
 .item-avatar {
   vertical-align: top;
-  padding-top: 10px;
   .avatar {
     vertical-align: middle;
   }
   .toggle {
     cursor: pointer;
+    padding: 10px 0;
+    display: block;
     span {
       vertical-align: middle;
     }

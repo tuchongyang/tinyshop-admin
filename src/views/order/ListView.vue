@@ -1,12 +1,8 @@
 <template>
   <div class="container">
-    <PageHeader title="商家管理" desc="商家管理,每一个商家就是一个店铺" />
+    <PageHeader title="订单管理" desc="管理店铺下的订单，可进行发货、确认订单等操作" />
     <BaseInfo type="card">
-      <CurdTable ref="tableRef" :data="data" :columns="columns" :page-options="pageOptions" index click-row-to-view :fetch-data="fetchData" :fetch-create="fetchCreate" :fetch-edit="fetchEdit" :fetch-remove="fetchRemove" @selectionChange="selectionChange">
-        <!-- <template #roleId="scope">
-          <el-tag>{{ scope.row.role.name }}</el-tag>
-        </template> -->
-      </CurdTable>
+      <CurdTable ref="tableRef" :data="data" :columns="columns" :page-options="pageOptions" index click-row-to-view :fetch-data="fetchData" :fetch-create="fetchCreate" :fetch-edit="fetchEdit" :fetch-remove="fetchRemove"> </CurdTable>
     </BaseInfo>
   </div>
 </template>
@@ -27,7 +23,7 @@ const data = ref([])
 const columns = getColumns()
 
 const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const params = {
       pageIndex,
       pageSize,
@@ -38,16 +34,21 @@ const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
       params.sortColumn = sortColumn
       params.sortType = sortType
     }
-    api.merchant.list(params).then((res) => {
-      data.value = res.result.rows // 数据赋值
-      pageOptions.value.total = res.result.count // 设置总页数
-      resolve()
-    })
+    api.shop.order
+      .list(params)
+      .then((res) => {
+        data.value = res.result.rows // 数据赋值
+        pageOptions.value.total = res.result.count // 设置总页数
+        resolve()
+      })
+      .catch(() => {
+        reject()
+      })
   })
 }
 const fetchCreate = (params) => {
   return new Promise((resolve, reject) => {
-    api.merchant
+    api.shop.order
       .save(params)
       .then(() => {
         instance.appContext.config.globalProperties.$message.success("保存成功")
@@ -62,7 +63,7 @@ const fetchCreate = (params) => {
 const fetchEdit = (editedParams, fullParams) => {
   editedParams.id = fullParams.id
   return new Promise((resolve, reject) => {
-    api.merchant
+    api.shop.order
       .save(editedParams)
       .then(() => {
         instance.appContext.config.globalProperties.$message.success("保存成功")
@@ -76,7 +77,7 @@ const fetchEdit = (editedParams, fullParams) => {
 }
 const fetchRemove = (row) => {
   return new Promise((resolve, reject) => {
-    api.merchant
+    api.shop.order
       .remove(row.id)
       .then(() => {
         tableRef.value.fetchData()
@@ -86,8 +87,5 @@ const fetchRemove = (row) => {
         reject(err)
       })
   })
-}
-const selectionChange = (rows) => {
-  console.log("row", rows)
 }
 </script>
