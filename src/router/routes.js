@@ -109,7 +109,7 @@ export default [
         component: () => import("@/components/Layout/EmptyLayout"),
         children: [
           {
-            path: "merchant",
+            path: "",
             name: "merchantList",
             meta: { title: "商家管理" },
             component: () => import("@/views/merchant/ListView"),

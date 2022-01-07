@@ -27,9 +27,9 @@ export function getColumns() {
         },
       },
     },
-    { label: "父级", prop: "parentId", form: { component: "select", asyncOptions }, hidden: true },
-    { label: "名称", prop: "name", filter: { component: "input" } },
-    { label: "描述", prop: "description", filter: { component: "input" }, form: { props: { type: "textarea" } } },
+    { label: "父级", prop: "parentId", form: { component: "select", asyncOptions, span: 24 }, hidden: true },
+    { label: "名称", prop: "name", filter: { component: "input" }, form: { rules: [{ required: true, message: "名称不能为空", trigger: "blur" }], span: 24 } },
+    { label: "描述", prop: "description", filter: { component: "input" }, form: { props: { type: "textarea" }, span: 24 } },
     {
       label: "状态",
       prop: "status",
