@@ -2,17 +2,22 @@
   <div class="container">
     <PageHeader title="订单管理" desc="管理店铺下的订单，可进行发货、确认订单等操作" />
     <BaseInfo type="card">
-      <CurdTable ref="tableRef" :data="data" :columns="columns" :page-options="pageOptions" index click-row-to-view :fetch-data="fetchData" :fetch-create="fetchCreate" :fetch-edit="fetchEdit" :fetch-remove="fetchRemove"> </CurdTable>
+      <CurdTable ref="tableRef" :data="data" :columns="columns" :option="option" :page-options="pageOptions" index :fetch-data="fetchData" :fetch-remove="fetchRemove">
+        <template #operation="scope">
+          <el-button type="text" :icon="Document" @click.stop="todetail(scope.row)">详情</el-button>
+        </template>
+      </CurdTable>
     </BaseInfo>
   </div>
 </template>
 <script setup>
-import { getCurrentInstance, ref } from "vue"
+import { ref } from "vue"
+import { useRouter } from "vue-router"
+import { Document } from "@element-plus/icons-vue"
 import { getColumns } from "./columns"
 import api from "@/api"
 import PageHeader from "@/components/Layout/PageHeader"
 
-const instance = getCurrentInstance()
 const tableRef = ref()
 const pageOptions = ref({
   total: 0,
@@ -21,6 +26,11 @@ const pageOptions = ref({
 })
 const data = ref([])
 const columns = getColumns()
+const option = {
+  hideMenuAdd: true,
+  hideOperationEdit: true,
+  hideOperationDetail: true,
+}
 
 const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
   return new Promise((resolve, reject) => {
@@ -46,35 +56,6 @@ const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
       })
   })
 }
-const fetchCreate = (params) => {
-  return new Promise((resolve, reject) => {
-    api.shop.order
-      .save(params)
-      .then(() => {
-        instance.appContext.config.globalProperties.$message.success("保存成功")
-        tableRef.value.fetchData()
-        resolve()
-      })
-      .catch((err) => {
-        reject(err)
-      })
-  })
-}
-const fetchEdit = (editedParams, fullParams) => {
-  editedParams.id = fullParams.id
-  return new Promise((resolve, reject) => {
-    api.shop.order
-      .save(editedParams)
-      .then(() => {
-        instance.appContext.config.globalProperties.$message.success("保存成功")
-        tableRef.value.fetchData()
-        resolve()
-      })
-      .catch((err) => {
-        reject(err)
-      })
-  })
-}
 const fetchRemove = (row) => {
   return new Promise((resolve, reject) => {
     api.shop.order
@@ -87,5 +68,9 @@ const fetchRemove = (row) => {
         reject(err)
       })
   })
+}
+const router = useRouter()
+const todetail = (row) => {
+  router.push("/order/detail/" + row.id)
 }
 </script>

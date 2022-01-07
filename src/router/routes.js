@@ -166,6 +166,12 @@ export default [
             meta: { title: "订单管理" },
             component: () => import("@/views/order/ListView"),
           },
+          {
+            path: "detail/:id",
+            name: "orderDetail",
+            meta: { title: "订单详情" },
+            component: () => import("@/views/order/DetailView"),
+          },
         ],
       },
       // 404 page must be placed at the end !!!

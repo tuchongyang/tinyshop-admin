@@ -6,4 +6,5 @@ export default {
   tree: (params) => axios.get("/shop/order/tree", { params }),
   remove: (id) => axios.delete("/shop/order/" + id),
   update: (params) => axios.post("/shop/order/update", params),
+  detail: (id) => axios.get("/shop/order/" + id),
 }
