@@ -1,4 +1,5 @@
 import constant from "@/utils/constant"
+import { deepClone } from "@/utils/common"
 export function getColumns() {
   return [
     { label: "主图", prop: "picUrl", form: { component: "file" } },
@@ -10,7 +11,7 @@ export function getColumns() {
       label: "状态",
       prop: "status",
       align: "center",
-      options: constant.GoodStatus,
+      options: deepClone(constant.GoodStatus),
       filter: {
         component: "select",
       },

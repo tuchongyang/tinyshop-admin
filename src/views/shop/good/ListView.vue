@@ -6,6 +6,9 @@
         <template #menuLeft>
           <el-button type="primary" @click="toadd">添加</el-button>
         </template>
+        <template #operation="scope">
+          <el-button type="text" @click.stop="toedit(scope.row)">编辑</el-button>
+        </template>
       </CurdTable>
     </BaseInfo>
   </div>
@@ -26,7 +29,8 @@ const pageOptions = ref({
 const data = ref([])
 const columns = getColumns()
 const option = {
-  hideBtnAdd: true,
+  hideMenuAdd: true,
+  hideOprationEdit: true,
 }
 
 const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
@@ -69,5 +73,8 @@ const fetchRemove = (row) => {
 }
 const toadd = () => {
   router.push("/shop/good/add")
+}
+const toedit = (row) => {
+  router.push("/shop/good/edit/" + row.id)
 }
 </script>

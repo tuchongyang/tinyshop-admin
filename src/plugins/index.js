@@ -5,6 +5,8 @@ import zhCn from "element-plus/es/locale/lang/zh-cn"
 import * as Icons from "./icons"
 
 import VueCurd from "@vue-curd/vue-curd"
+
+import FileService from "@/components/FileService"
 export default (app) => {
   app.use(ElementPlus, { locale: zhCn, size: "mini" })
   // 装载components组件
@@ -21,4 +23,5 @@ export default (app) => {
   }
 
   app.use(VueCurd)
+  app.use(FileService)
 }

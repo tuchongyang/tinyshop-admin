@@ -48,8 +48,8 @@ export default defineComponent({
     }
     const option = {
       hideMenu: true,
-      hideBtnAdd: true,
-      pageHide: true,
+      hideMenuAdd: true,
+      hidePage: true,
       hideOprationEdit: true,
       hideOprationDetail: true,
     }

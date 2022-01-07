@@ -3,7 +3,7 @@
   <!-- <el-empty description="暂无数据" v-if="!option"></el-empty> -->
 </template>
 <script setup>
-import { onMounted, ref, defineProps, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import echarts from "./echarts"
 
 const props = defineProps({

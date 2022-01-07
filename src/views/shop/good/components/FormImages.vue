@@ -1,8 +1,5 @@
 <template>
-  <el-upload ref="uploadRef" :action="'/api/system/file/upload'" :file-list="model" :headers="headers" list-type="picture-card" :auto-upload="true" :on-success="onSuccess">
-    <template #default>
-      <el-icon><component :is="'Plus'"></component></el-icon>
-    </template>
+  <FileUpload ref="uploadRef" :file-list="model" :max="5" @success="onSuccess">
     <template #file="{ file }">
       <span v-if="file.isDefault" class="image-default-tag">主图</span>
       <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
@@ -15,14 +12,15 @@
         </span>
       </span>
     </template>
-  </el-upload>
+  </FileUpload>
 </template>
 <script>
 import { defineComponent, computed, ref } from "vue"
 import Storage from "@/utils/Storage"
+import FileUpload from "@/components/FileUpload/file-upload.vue"
 export default defineComponent({
-  name: "SchemaFormInput",
-  components: {},
+  name: "SchemaFormImages",
+  components: { FileUpload },
   props: {
     formItem: {
       // 表单项
@@ -57,7 +55,7 @@ export default defineComponent({
     const handleRemove = (file) => {
       var fileList = uploadRef.value.uploadFiles
       for (let i = 0; i < fileList.length; i++) {
-        if (fileList[i].uid == file.uid) {
+        if (fileList[i].id == file.id) {
           fileList.splice(i, 1)
           break
         }
@@ -70,10 +68,9 @@ export default defineComponent({
       })
       file.isDefault = true
     }
-    const onSuccess = (response, file, fileList) => {
-      file.id = response.result.id
-      if (fileList.length == 1) {
-        file.isDefault = true
+    const onSuccess = (files, fileList) => {
+      if (!fileList.some((a) => a.isDefault)) {
+        fileList[0].isDefault = true
       }
       model.value = fileList
     }

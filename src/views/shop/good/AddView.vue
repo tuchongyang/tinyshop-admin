@@ -1,6 +1,6 @@
 <template>
   <div class="custom-form">
-    <PageHeader title="添加商品" />
+    <PageHeader :title="id ? '编辑商品' : '添加商品'" />
     <BaseInfo type="card">
       <el-steps :active="step" align-center finish-status="success" style="margin-bottom: 40px">
         <el-step title="基本信息"></el-step>
@@ -43,6 +43,7 @@
 
 <script setup>
 import { ref, getCurrentInstance } from "vue"
+import { useRouter, useRoute } from "vue-router"
 import PageHeader from "@/components/Layout/PageHeader"
 import { Loading } from "@element-plus/icons-vue"
 import FormSpecs from "./components/FormSpecs"
@@ -67,7 +68,7 @@ const validateSpecs = (rule, value, callback) => {
 }
 const formSchema = ref({
   formItem: [
-    { type: "cascader", label: "商品分类", prop: "categoryId", span: 24, asyncOptions, props: { props: { value: "id", label: "name" } } },
+    { type: "cascader", label: "商品分类", prop: "categoryId", span: 24, asyncOptions, props: { props: { value: "id", label: "name", emitPath: false } } },
     { type: "input", label: "商品名称", prop: "name", span: 24 },
     { type: "input", label: "商品描述", prop: "description", span: 24, props: { type: "textarea" } },
     { type: "images", label: "商品图片", prop: "images", span: 24, value: [] },
@@ -98,18 +99,24 @@ const dynamicForm1 = ref()
 const instance = getCurrentInstance()
 const loading = ref(false)
 const form1 = ref({})
+const router = useRouter()
 const submit = () => {
   dynamicForm1.value.validate((valid) => {
     if (valid) {
       loading.value = true
       console.log("form1", form1)
-      setTimeout(() => {
+      const defaultImage = form1.value.images.find((a) => a.isDefault)
+      if (defaultImage) {
+        form1.value.picId = defaultImage.id
+      }
+      api.shop.good.save(form1.value).then(() => {
         instance.appContext.config.globalProperties.$message({
           type: "success",
           message: "提交成功",
         })
         loading.value = false
-      }, 1000)
+        router.back()
+      })
     }
   })
 }
@@ -124,6 +131,33 @@ const next = () => {
     }
   })
 }
+
+const route = useRoute()
+
+// 编辑
+const id = route.params.id
+const detail = ref({})
+const getDetail = () => {
+  api.shop.good.detail(id).then((res) => {
+    detail.value = res.result
+    // 设置主图
+    res.result.images.forEach((a) => {
+      if (a.id === res.result.picId) {
+        a.isDefault = true
+      }
+    })
+    // 处理价格，避免控制台黄色警告
+    res.result.specs.forEach((a) => {
+      a.marketPrice = +a.marketPrice
+      a.salePrice = +a.salePrice
+    })
+    for (const i in res.result) {
+      form1.value[i] = res.result[i]
+    }
+    console.log("form1.value", form1.value)
+  })
+}
+id && getDetail()
 </script>
 
 <style></style>

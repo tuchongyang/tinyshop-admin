@@ -20,6 +20,7 @@ export default [
     name: "Dashboard",
     meta: { title: "主页", icon: "House" },
     component: () => import("@/components/Layout/BasicLayout"),
+    redirect: "/dashboard",
     children: [
       {
         path: "404",
@@ -32,9 +33,9 @@ export default [
         hidden: true,
       },
       {
-        path: "",
-        name: "home",
-        meta: { title: "主页", icon: "House" },
+        path: "dashboard",
+        name: "dashboard",
+        meta: { title: "概览", icon: "House" },
         component: () => import("@/views/home/DashboardView"),
       },
       {
@@ -131,6 +132,12 @@ export default [
             path: "good/add",
             name: "goodAdd",
             meta: { title: "添加商品" },
+            component: () => import("@/views/shop/good/AddView"),
+          },
+          {
+            path: "good/edit/:id",
+            name: "goodEdit",
+            meta: { title: "编辑商品" },
             component: () => import("@/views/shop/good/AddView"),
           },
           {
