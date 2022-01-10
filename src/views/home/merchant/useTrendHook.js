@@ -1,12 +1,13 @@
 import api from "@/api"
 import { ref } from "vue"
+import dayjs from "dayjs"
 export function useTrendHook() {
   const trendData = ref([])
   const optionAmount = ref()
   const optionNum = ref()
   const params = {
-    startTime: "2022-01-01",
-    endTime: "2022-01-11",
+    startTime: dayjs().subtract(7, "day").format("YYYY-MM-DD"),
+    endTime: dayjs().format("YYYY-MM-DD"),
   }
   const getOption = (data, series) => {
     const option1 = {

@@ -4,7 +4,7 @@ export function useRankHook() {
   const rankList = ref([])
   const getData = () => {
     api.statistics.dashboardadmin.shopsalerank().then((res) => {
-      rankList.value = res.result
+      rankList.value = res.result.slice(0, 7)
     })
   }
   getData()
