@@ -1,3 +1,4 @@
+import { Clock, Van } from "@element-plus/icons-vue"
 export const constantMap = {
   CommonStatus: [
     { value: 1, label: "启用", className: "color-green", icon: "circle-check" },
@@ -9,10 +10,10 @@ export const constantMap = {
   ],
   // ordered: '待付款', inpayment: '付款中', paid: '已付款，待发货', receiving: '已发货，待收货', completed: '已完成', canceled: '已取消',closed:已关闭
   OrderStatus: [
-    { value: "ordered", label: "待付款", className: "color-blue", icon: "circle-check" },
+    { value: "ordered", label: "待付款", className: "color-blue", icon: Clock },
     { value: "inpayment", label: "付款中", className: "color-blue", icon: "remove" },
-    { value: "paid", label: "待发货", className: "color-orange", icon: "remove" },
-    { value: "receiving", label: "待收货", className: "color-orange", icon: "remove" },
+    { value: "paid", label: "待发货", className: "color-orange", icon: Van },
+    { value: "receiving", label: "待收货", className: "color-blue", icon: Van },
     { value: "completed", label: "已完成", className: "color-green", icon: "remove" },
     { value: "canceled", label: "已取消", className: "color-gray", icon: "remove" },
     { value: "closed", label: "已关闭", className: "color-gray", icon: "remove" },

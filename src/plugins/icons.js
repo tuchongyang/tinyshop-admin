@@ -25,4 +25,8 @@ export {
   Document,
   Plus,
   ArrowDown,
+  // menu菜单需要的图标
+  HomeFilled,
+  Shop,
+  SetUp,
 } from "@element-plus/icons-vue"
