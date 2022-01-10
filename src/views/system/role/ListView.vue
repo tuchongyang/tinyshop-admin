@@ -2,19 +2,24 @@
   <div class="container">
     <PageHeader title="角色管理" desc="系统角色管理,不同角色可分配不同的菜单与权限" />
     <BaseInfo type="card">
-      <CurdTable ref="tableRef" :data="data" :columns="columns" :page-options="pageOptions" index click-row-to-view :fetch-data="fetchData" :fetch-create="fetchCreate" :fetch-edit="fetchEdit" :fetch-remove="fetchRemove" @selectionChange="selectionChange">
-        <!-- <template #roleId="scope">
-          <el-tag>{{ scope.row.role.name }}</el-tag>
-        </template> -->
+      <CurdTable ref="tableRef" :data="data" :columns="columns" :page-options="pageOptions" index click-row-to-view :fetch-data="fetchData" :fetch-create="fetchCreate" :fetch-edit="fetchEdit" :fetch-remove="fetchRemove">
+        <template #operation="scope">
+          <el-button type="text" icon="el-icon-edit" @click.stop="authMenu(scope.row)">授权菜单</el-button>
+          <el-button type="text" icon="el-icon-edit" @click.stop="authPermission(scope.row)">授权权限</el-button>
+        </template>
       </CurdTable>
     </BaseInfo>
   </div>
+  <RoleMenu v-if="menuVisible" :visible="menuVisible" :data="currentData"></RoleMenu>
+  <RolePermission v-if="authVisible" :visible="authVisible" :data="currentData"></RolePermission>
 </template>
 <script setup>
 import { getCurrentInstance, ref } from "vue"
 import { getColumns } from "./columns"
 import api from "@/api"
 import PageHeader from "@/components/Layout/PageHeader"
+import RoleMenu from "./RoleMenu"
+import RolePermission from "./RolePermission"
 
 const instance = getCurrentInstance()
 const tableRef = ref()
@@ -87,7 +92,15 @@ const fetchRemove = (row) => {
       })
   })
 }
-const selectionChange = (rows) => {
-  console.log("row", rows)
+const currentData = ref()
+const menuVisible = ref(false)
+const authVisible = ref(false)
+const authMenu = (data) => {
+  currentData.value = data
+  menuVisible.value = true
+}
+const authPermission = (data) => {
+  currentData.value = data
+  authVisible.value = true
 }
 </script>
