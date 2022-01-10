@@ -7,4 +7,5 @@ export default {
   remove: (id) => axios.delete("/shop/order/" + id),
   update: (params) => axios.post("/shop/order/update", params),
   detail: (id) => axios.get("/shop/order/" + id),
+  send: (id) => axios.post("/shop/order/send/" + id),
 }

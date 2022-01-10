@@ -5,15 +5,16 @@
       <CurdTable ref="tableRef" :data="data" :columns="columns" :option="option" :page-options="pageOptions" index :fetch-data="fetchData" :fetch-remove="fetchRemove">
         <template #operation="scope">
           <el-button type="text" :icon="Document" @click.stop="todetail(scope.row)">详情</el-button>
+          <el-button v-if="scope.row.status === 'paid'" type="text" :icon="Van" @click.stop="tosend(scope.row)">发货</el-button>
         </template>
       </CurdTable>
     </BaseInfo>
   </div>
 </template>
 <script setup>
-import { ref } from "vue"
+import { ref, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
-import { Document } from "@element-plus/icons-vue"
+import { Document, Van } from "@element-plus/icons-vue"
 import { getColumns } from "./columns"
 import api from "@/api"
 import PageHeader from "@/components/Layout/PageHeader"
@@ -30,6 +31,7 @@ const option = {
   hideMenuAdd: true,
   hideOperationEdit: true,
   hideOperationDetail: true,
+  hideOperationDelete: true,
 }
 
 const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
@@ -56,18 +58,16 @@ const fetchData = ({ pageIndex, pageSize, sortColumn, sortType, search }) => {
       })
   })
 }
-const fetchRemove = (row) => {
-  return new Promise((resolve, reject) => {
-    api.shop.order
-      .remove(row.id)
-      .then(() => {
+const instance = getCurrentInstance()
+const tosend = (row) => {
+  instance.appContext.config.globalProperties
+    .$confirm("确认进行发货操作吗")
+    .then(() => {
+      api.shop.order.send(row.id).then(() => {
         tableRef.value.fetchData()
-        resolve(row)
       })
-      .catch((err) => {
-        reject(err)
-      })
-  })
+    })
+    .catch(() => {})
 }
 const router = useRouter()
 const todetail = (row) => {
