@@ -1,11 +1,11 @@
 <template>
-  <el-drawer title="角色菜单授权" v-model="dVisible" :wrapperClosable="true" :before-close="handleClose" append-to-body>
+  <el-drawer title="角色菜单授权" v-model="visible" append-to-body>
     <div class="drawer-body" v-loading="loading">
-      <el-tree ref="tree" class="menu-tree" :props="props" :data="tree" highlight-current default-expand-all>
+      <el-tree class="menu-tree" :props="treeProps" :data="tree" highlight-current default-expand-all>
         <template #default="{ node, data }">
           <div class="custom-tree-node">
             <el-checkbox v-model="data.checked" :indeterminate="data.checked && data.children && !!data.children.length && !node.childNodes.every((a) => a.data.checked)" :label="data.id">{{ null }}</el-checkbox>
-            <i class="node-icon" :class="[data.icon || 'el-icon-folder']"></i>
+            <el-icon class="node-icon"><component :is="data.icon || Folder"></component></el-icon>
             <span class="node-tit">{{ data.name }}</span>
           </div>
         </template>
@@ -16,84 +16,74 @@
     </div>
   </el-drawer>
 </template>
-<script>
+<script setup>
+import { ref, getCurrentInstance } from "vue"
 import api from "@/api"
 import { deepClone } from "@/utils/common"
-export default {
-  props: ["visible", "data"],
-  computed: {
-    dVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit("update:visible", val)
-      },
-    },
-  },
-  data() {
-    return {
-      loading: false,
-      props: {
-        label: "name",
-        children: "children",
-        isLeaf: "leaf",
-      },
-      sourceTree: [],
-      tree: [],
-      defaultChecked: [],
-    }
-  },
-  created() {
-    this.getAllMenu()
-  },
-  methods: {
-    init() {
-      this.defaultChecked = []
-      this.tree = deepClone(this.sourceTree)
-      this.getList()
-    },
-    handleClose() {
-      this.$emit("update:visible", false)
-    },
-    getAllMenu() {
-      api.system.menu.tree().then((res) => {
-        this.sourceTree = res.result
-        this.init()
-      })
-    },
-    getList() {
-      this.loading = true
-      api.system.role
-        .menuList(this.data.id)
-        .then((res) => {
-          this.defaultChecked = res.result.map((a) => a.id)
-          this.findChecked()
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
-    findChecked() {
-      var find = (menus) => {
-        for (let i = 0; i < menus.length; i++) {
-          if (this.defaultChecked.indexOf(menus[i].id) > -1) {
-            this.$set(menus[i], "checked", true)
-          }
-          if (menus[i].children && menus[i].children.length) {
-            find(menus[i].children)
-          }
-        }
+import { Folder } from "@element-plus/icons-vue"
+const visible = ref(false)
+let currentData = {}
+const open = (data) => {
+  currentData = data
+  visible.value = true
+  init()
+  getList(data)
+}
+defineExpose({ open })
+const treeProps = ref({
+  label: "name",
+  children: "children",
+  isLeaf: "leaf",
+})
+const loading = ref(false)
+const defaultChecked = ref([])
+const sourceTree = ref([])
+const tree = ref([])
+
+const findChecked = () => {
+  var find = (menus) => {
+    for (let i = 0; i < menus.length; i++) {
+      if (defaultChecked.value.indexOf(menus[i].id) > -1) {
+        menus[i].checked = true
       }
-      find(this.tree)
-    },
-    submit() {
-      api.system.role.menuSave(this.data.id, this.tree).then(() => {
-        this.$message({ type: "success", message: "保存成功", duration: 2000 })
-        this.handleClose()
-      })
-    },
-  },
+      if (menus[i].children && menus[i].children.length) {
+        find(menus[i].children)
+      }
+    }
+  }
+  find(tree.value)
+}
+const getList = (data) => {
+  loading.value = true
+  api.system.role
+    .menuList(data.id)
+    .then((res) => {
+      defaultChecked.value = res.result.map((a) => a.id)
+      findChecked()
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+const init = () => {
+  defaultChecked.value = []
+  tree.value = deepClone(sourceTree.value)
+}
+
+const getAllMenu = () => {
+  api.system.menu.tree().then((res) => {
+    sourceTree.value = res.result
+    init()
+  })
+}
+
+getAllMenu()
+const instance = getCurrentInstance()
+const submit = () => {
+  api.system.role.menuSave(currentData.id, tree.value).then(() => {
+    instance.appContext.config.globalProperties.$message({ type: "success", message: "保存成功", duration: 2000 })
+    visible.value = false
+  })
 }
 </script>
 <style scoped lang="scss">

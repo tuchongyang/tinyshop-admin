@@ -1,5 +1,5 @@
 <template>
-  <el-drawer title="角色权限" v-model="dVisible" :wrapperClosable="true" :before-close="handleClose" append-to-body @open="init">
+  <el-drawer title="角色权限" v-model="visible" :wrapperClosable="true" append-to-body>
     <div class="drawer-body" v-loading="loading">
       <div class="permission-list">
         <div class="item" v-for="item in list" :key="item.id">
@@ -18,63 +18,54 @@
     </div>
   </el-drawer>
 </template>
-<script>
+<script setup>
+import { ref, getCurrentInstance } from "vue"
 import api from "@/api"
-export default {
-  props: ["visible", "data"],
-  computed: {
-    dVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit("update:visible", val)
-      },
-    },
-  },
-  data() {
-    return {
-      loading: false,
-      props: {
-        label: "name",
-        children: "actions",
-        isLeaf: "leaf",
-      },
-      list: [],
-    }
-  },
-  created() {},
-  methods: {
-    init() {
-      this.defaultChecked = []
-      this.getList()
-    },
-    handleClose() {
-      this.$emit("update:visible", false)
-    },
-    getList() {
-      this.loading = true
-      api.system.role
-        .authList(this.data.id)
-        .then((res) => {
-          this.list = res.result
-          this.findChecked()
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
 
-    submit() {
-      api.system.role.authSave(this.data.id, this.list).then(() => {
-        this.$message({ type: "success", message: "保存成功", duration: 2000 })
-        this.handleClose()
-      })
-    },
-  },
+const loading = ref(false)
+const visible = ref(false)
+const list = ref([])
+let currentData = {}
+
+const open = (data) => {
+  currentData = data
+  visible.value = true
+  getList(data)
+}
+defineExpose({ open })
+
+const getList = (data) => {
+  loading.value = true
+  api.system.role
+    .authList(data.id)
+    .then((res) => {
+      list.value = res.result
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+const instance = getCurrentInstance()
+const submit = () => {
+  api.system.role.authSave(currentData.id, list.value).then(() => {
+    instance.appContext.config.globalProperties.$message({ type: "success", message: "保存成功", duration: 2000 })
+    visible.value = false
+  })
 }
 </script>
 <style scoped lang="scss">
+.drawer-body {
+  position: absolute;
+  height: calc(100% - 150px);
+  overflow: auto;
+}
+.drawer-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 15px;
+}
 .permission-list {
   margin: 0 15px;
   .item {

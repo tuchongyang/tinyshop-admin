@@ -8,7 +8,7 @@
       </el-col>
       <el-col :span="6">
         <BaseInfo type="card" title="用户总数量">
-          <b class="num">￥{{ total.usernum }}</b>
+          <b class="num">{{ total.usernum }}</b>
           <div class="desc"></div>
         </BaseInfo>
       </el-col>
@@ -128,15 +128,19 @@ const toPath = (row) => {
   height: 210px;
 }
 .rank-list {
+  height: 200px;
   .item {
-    overflow: hidden;
+    padding: 0 60px 0 30px;
+    position: relative;
     line-height: 30px;
     .index {
-      float: left;
+      position: absolute;
+      left: 0;
+      top: 0;
       width: 20px;
       height: 20px;
       line-height: 20px;
-      display: inline-block;
+      display: block;
       background: var(--el-bg-color);
       border-radius: 50%;
       text-align: center;
@@ -145,11 +149,17 @@ const toPath = (row) => {
       color: var(--el-text-color-regular);
       margin-top: 5px;
     }
-    .name {
-      float: left;
+    .title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+      color: #444;
     }
     .num {
-      float: right;
+      position: absolute;
+      top: 0;
+      right: 0;
     }
     &:nth-child(1) {
       .index {

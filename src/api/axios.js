@@ -1,6 +1,7 @@
 import axios from "axios"
 import { ElMessage } from "element-plus"
 import Storage from "@/utils/Storage"
+import router from "@/router"
 
 const service = axios.create()
 /*axios 配置*/
@@ -51,7 +52,12 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   function (response) {
     if (response.data.status === 401) {
-      ElMessage.error(response.data.message || "请求失败，请稍后重试")
+      if (router.currentRoute.value.path.indexOf("/login") <= -1) {
+        ElMessage.error(response.data.message || "请求失败，请稍后重试")
+        router.replace({
+          path: "/login",
+        })
+      }
       return Promise.reject(response.data)
     }
     if (response.data.status != 200) {

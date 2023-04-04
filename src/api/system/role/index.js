@@ -12,4 +12,16 @@ export default {
   remove(id) {
     return axios.delete("/system/role/" + id)
   },
+  menuList(roleId) {
+    return axios.get("/system/role/" + roleId + "/menu")
+  },
+  menuSave(id, opt) {
+    return axios.post("/system/role/" + id + "/menu", opt)
+  },
+  authList(id) {
+    return axios.get("/system/role/" + id + "/permission")
+  },
+  authSave(id, opt) {
+    return axios.post("/system/role/" + id + "/permission", opt)
+  },
 }
