@@ -4,7 +4,7 @@
     <BaseInfo type="card">
       <CurdTable ref="tableRef" :data="data" :columns="columns" :page-options="pageOptions" index click-row-to-view :fetch-data="fetchData" :fetch-create="fetchCreate" :fetch-edit="fetchEdit" :fetch-remove="fetchRemove" @selectionChange="selectionChange">
         <template #roleId="scope">
-          <el-tag>{{ scope.row.role.name }}</el-tag>
+          <el-tag v-if="scope.row.role">{{ scope.row.role.name }}</el-tag>
         </template>
       </CurdTable>
     </BaseInfo>
