@@ -3,6 +3,7 @@ module.exports = defineConfig({
   publicPath: "/admin",
   transpileDependencies: true,
   productionSourceMap: false,
+  lintOnSave: false,
   css: {
     loaderOptions: {
       sass: {
